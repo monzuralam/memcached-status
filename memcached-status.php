@@ -21,6 +21,8 @@ if(!class_exists('MemcachedStatus')){
     class MemcachedStatus{
         public function __construct(){
             add_action('admin_menu', array($this,'memcachedstatus_menu'));
+            add_filter('plugin_action_links_memcached-status', array($this, 'memcached_status_link'));
+            add_filter('plugin_action_links_' . plugin_basename( __FILE__ ), array($this, 'memcached_status_link'));
         }
     
         public function memcachedstatus_menu(){
@@ -45,6 +47,14 @@ if(!class_exists('MemcachedStatus')){
                 ?>
             </div>
             <?php
+        }
+
+        /**
+        * Plugin Setting Page Linked
+        */
+        function memcached_status_link($links){
+            $links[] = '<a href="'. esc_url( get_admin_url(null, 'options-general.php?page=memcached-status') ) .'">Status</a>';
+            return $links;
         }
     }
     new MemcachedStatus();
